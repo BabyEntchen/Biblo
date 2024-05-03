@@ -1,9 +1,9 @@
 import requests
-from database import Database
+from utils.database import Database
 
 
 class Book:
-    def __init__(self, isbn, title, author, price, publisher, published, cover_url):
+    def __init__(self, isbn, title, cover_url, author, price, publisher, published):
         self.isbn = isbn
         self.title = title
         self.author = author
@@ -16,9 +16,11 @@ class Book:
     @classmethod
     def from_dict(cls, data):
         return cls(
+            data["isbn"],
             data["title"],
             data["author"],
             data["price"],
+            data["publisher"],
             data["published"],
             data["cover_url"]
         )
@@ -26,6 +28,7 @@ class Book:
 
     @classmethod
     def isbn_get(cls, isbn):
+        isbn = isbn.replace("-", "")
         response = requests.get(f"https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&jscmd=details&format=json")
         if response.status_code == 200:
             data = response.json()
@@ -39,7 +42,7 @@ class Book:
             publisher = ", ".join(book_data["details"].get("publishers"))
             published = book_data["details"].get("publish_date")
             cover_url = book_data.get("thumbnail_url")
-            return cls(isbn, title, author, price, publisher, published, cover_url)
+            return cls(isbn, title, cover_url, author, price, publisher, published)
         else:
             raise Exception("ISBN was not found.")
         return None
@@ -51,9 +54,24 @@ class Book:
         return cls(*book)
 
     def save(self):
-        self.db.execute("INSERT INTO books VALUES (?, ?, ?, ?, ?, ?, ?)", (self.isbn, self.title, self.author, self.price, self.publisher, self.published, self.cover_url))
+        self.db.execute("INSERT INTO books VALUES (?, ?, ?, ?, ?, ?, ?)", (int(self.isbn), self.title, self.cover_url, self.author, self.price, self.publisher, self.published))
 
+
+    def __dict__(self):
+        return {
+            "isbn": self.isbn,
+            "title": self.title,
+            "author": self.author,
+            "price": self.price,
+            "publisher": self.publisher,
+            "published": self.published,
+            "cover_url": self.cover_url
+        }
 
 
     def __str__(self):
         return f"{self.title} by {self.author} - {self.price}"
+
+
+def get_books():
+    return [Book(*book) for book in Database("books.db").fetch("SELECT * FROM books")]
