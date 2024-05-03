@@ -1,4 +1,5 @@
 import requests
+from database import Database
 
 
 class Book:
@@ -10,6 +11,7 @@ class Book:
         self.publisher = publisher
         self.published = published
         self.cover_url = cover_url
+        self.db = Database("books.db").create_database()
 
     @classmethod
     def from_dict(cls, data):
@@ -20,6 +22,7 @@ class Book:
             data["published"],
             data["cover_url"]
         )
+
 
     @classmethod
     def isbn_get(cls, isbn):
@@ -40,6 +43,15 @@ class Book:
         else:
             raise Exception("ISBN was not found.")
         return None
+
+    @classmethod
+    def get_book(cls, isbn):
+        db = Database("books.db")
+        book = db.execute("SELECT * FROM books WHERE isbn = ?", (isbn,))
+        return cls(*book)
+
+    def save(self):
+        self.db.execute("INSERT INTO books VALUES (?, ?, ?, ?, ?, ?, ?)", (self.isbn, self.title, self.author, self.price, self.publisher, self.published, self.cover_url))
 
 
 
