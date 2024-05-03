@@ -6,7 +6,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    books = get_books()
     return render_index()
 
 
@@ -29,6 +28,7 @@ def add_form():
 def render_index():
     books = get_books()
     return render_template('index.html', book_list=[book for book in books])
+
 
 if __name__ == '__main__':
     app.run()
