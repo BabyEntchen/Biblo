@@ -50,7 +50,8 @@ class Book:
     @classmethod
     def get_book(cls, isbn):
         db = Database("books.db")
-        book = db.execute("SELECT * FROM books WHERE isbn = ?", (isbn,))
+        book = db.fetchone("SELECT * FROM books WHERE isbn = ?", (int(isbn),))
+        print(book)
         return cls(*book)
 
     def save(self):
@@ -68,6 +69,23 @@ class Book:
             "cover_url": self.cover_url
         }
 
+    @staticmethod
+    def search(query):
+        response = requests.get(f"https://openlibrary.org/search.json?q={query.replace(' ', '+')}")
+        if response.status_code == 200:
+            data = response.json()
+            books = data["docs"][0]['isbn']
+            result = []
+            for book in books:
+                try:
+                    book = Book.isbn_get(book)
+                except Exception:
+                    book = None
+                if book:
+                    result.append(book)
+            return result
+        else:
+            raise Exception("Search failed.")
 
     def __str__(self):
         return f"{self.title} by {self.author} - {self.price}"

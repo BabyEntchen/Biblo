@@ -22,10 +22,18 @@ class Database:
         conn.commit()
         conn.close()
 
-    def fetch(self, query):
+    def fetchall(self, query, values):
         conn = sqlite3.connect(self.db_name)
         c = conn.cursor()
-        c.execute(query)
+        c.execute(query, values)
         result = c.fetchall()
+        conn.close()
+        return result
+
+    def fetchone(self, query, values):
+        conn = sqlite3.connect(self.db_name)
+        c = conn.cursor()
+        c.execute(query, values)
+        result = c.fetchone()
         conn.close()
         return result

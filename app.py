@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from utils.books import Book, get_books
+from markupsafe import escape
 
 app = Flask(__name__)
 
@@ -17,12 +18,22 @@ def add():
 @app.route('/add', methods=['POST'])
 def add_form():
     isbn = request.form['isbn']
-    book = Book.isbn_get(isbn)
-    try:
-        book.save()
-    except Exception as e:
-        return render_template('add.html', error="Something went wrong. Error: " + str(e))
-    return render_index()
+    if isbn:
+        book = Book.isbn_get(isbn)
+        try:
+            book.save()
+        except Exception as e:
+            return render_template('add.html', error="Something went wrong. Error: " + str(e))
+        return render_index()
+    elif search := request.form['search']:
+        books = Book.search(search)
+        return render_template('add.html', search_results=books)
+
+
+@app.route('/book/<isbn>')
+def book(isbn):
+    book = Book.get_book(escape(isbn))
+    return render_template('book.html', book=book)
 
 
 def render_index():

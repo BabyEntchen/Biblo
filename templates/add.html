@@ -9,10 +9,49 @@
     </div>
     <div class="menu">
         <form method="POST">
-            <a>ISBN</a>
-            <input name="isbn">
+            <div class="search">
+                <a>Search</a>
+                <label>
+                    <input name="search">
+                </label>
+            </div>
+            {% for book in search_results %}
+                <div class="book">
+                    <img class="cover" src="{{ book.cover_url }}" alt="{{ book.title }}">
+                    <h2>{{ book.title }}</h2>
+                    <p>Author: {{ book.author }}</p>
+                    <p>Published: {{ book.published }}</p>
+                    <p>ISBN: {{ book.isbn }}</p>
+                    <p>Publisher: {{ book.publisher }}</p>
+                </div>
+            {% endfor %}
+            <div class="isbn">
+                <h4>----------------------------</h4>
+                <a>ISBN</a>
+                <label>
+                    <input name="isbn">
+                </label>
+            </div>
+            <div class="review">
+                <a>Review</a>
+                <label>
+                    <textarea id="text" name="review_field" cols="35" rows="4"></textarea>
+                </label>
+            </div>
+            <div class="rating">
+                <a>Rating</a>
+                <label>
+                    <input type="range" id="points" name="points" min="0" max="10">
+                </label>
+            </div>
             <input type="submit">
         </form>
+        <div class="error">
+            <a>{{ error }}</a>
+        </div>
+        <div class="back">
+            <a href=".">Back to Homepage</a>
+        </div>
     </div>
 
 </body>

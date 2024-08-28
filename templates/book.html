@@ -1,0 +1,24 @@
+<html lang="en">
+<head>
+    <title>Biblo - your home libary</title>
+    <link rel="stylesheet" type="text/css" href="static/assets/css/style.css">
+</head>
+<body>
+    <div class="title">
+        <h1>Biblo</h1>
+    </div>
+    <div class="container">
+        <div class="book">
+            <img class="cover" src="{{ book.cover_url }}" alt="{{ book.title }}">
+            <h2>{{ book.title }}</h2>
+            <p>Author: {{ book.author }}</p>
+            <p>Published: {{ book.published }}</p>
+            <p>ISBN: {{ book.isbn }}</p>
+            <p>Publisher: {{ book.publisher }}</p>
+        </div>
+    <div class="add">
+        <a href="/book/{{ book.isbn }}/rate">+ Rate this book</a>
+    </div>
+    </div>
+</body>
+</html>
