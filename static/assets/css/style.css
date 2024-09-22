@@ -4,6 +4,7 @@
     color: #333;
     margin: 0;
     padding: 0;
+    text-decoration: none;
 }
 
 .title {
@@ -36,6 +37,12 @@
     background-color: #fff;
 }
 
+.search {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
 .book:hover {
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
     transition: 0.3s;
@@ -46,6 +53,19 @@
     margin-bottom: 20px;
     margin-top: 20px;
     text-align: center;
+}
+
+.delete {
+    font-size: 24px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.bottom {
+    margin-top: 20px;
+    text-align: center;
+
 }
 
 .isbn {
@@ -65,8 +85,12 @@
 }
 
 .back {
-
     font-size: 15px;
     margin: auto;
+    text-align: center;
+}
+
+.submit {
+    margin-top: 10px;
     text-align: center;
 }

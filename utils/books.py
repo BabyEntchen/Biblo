@@ -14,6 +14,10 @@ class Book:
         self.db = Database("books.db").create_database()
 
     @classmethod
+    def create(cls, isbn, title, cover_url, author, price, publisher, published):
+        return cls(isbn, title, cover_url, author, price, publisher, published)
+
+    @classmethod
     def from_dict(cls, data):
         return cls(
             data["isbn"],
@@ -30,7 +34,7 @@ class Book:
     def isbn_get(cls, isbn):
         isbn = isbn.replace("-", "")
         response = requests.get(f"https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&jscmd=details&format=json")
-        if response.status_code == 200:
+        if response.status_code == 200 or response.json == {}:
             data = response.json()
             book_data = data["ISBN:" + isbn]
             title = book_data["details"].get("title")
@@ -74,7 +78,10 @@ class Book:
         response = requests.get(f"https://openlibrary.org/search.json?q={query.replace(' ', '+')}")
         if response.status_code == 200:
             data = response.json()
-            books = data["docs"][0]['isbn']
+            try:
+                books = data["docs"][0]['isbn']
+            except IndexError:
+                books = []
             result = []
             for book in books:
                 try:
@@ -87,9 +94,32 @@ class Book:
         else:
             raise Exception("Search failed.")
 
+    def add_rating(self, points):
+        self.db.execute("INSERT INTO ratings VALUES (?, ?, ?)", (int(self.isbn), "points", points))
+
+    def get_rating(self):
+        ratings = self.db.fetchall("SELECT * FROM ratings WHERE isbn = ?", (int(self.isbn),))
+        if len(ratings) == 0:
+            return None
+        avrg = 0
+        for rating in ratings:
+            avrg += rating[2]
+        avrg /= len(ratings)
+        return avrg
+
+    def get_reviews(self):
+        return self.db.fetchall("SELECT * FROM reviews WHERE isbn = ?", (int(self.isbn),))
+
+    @property
+    def rating(self):
+        return self.get_rating()
+
+
     def __str__(self):
         return f"{self.title} by {self.author} - {self.price}"
 
 
-def get_books():
-    return [Book(*book) for book in Database("books.db").fetch("SELECT * FROM books")]
+def get_books(name=None):
+    if name:
+        return [Book(*book) for book in Database("books.db").fetchall("SELECT * FROM books WHERE title LIKE ?", (f"%{name}%",))]
+    return [Book(*book) for book in Database("books.db").fetchall("SELECT * FROM books")]

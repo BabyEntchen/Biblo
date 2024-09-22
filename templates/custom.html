@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+    <title>Biblo - your home libary</title>
+    <link rel="stylesheet" type="text/css" href="../static/assets/css/style.css">
+</head>
+<body>
+    <a href="../">
+        <div class="title">
+            <h1>Biblo</h1>
+        </div>
+    </a>
+    <form method="POST">
+        <div class="container">
+            <div class="book">
+                <a>Title:</a>
+                <input name="title">
+                <a>Author:</a>
+                <input name="author">
+                <a>Published:</a>
+                <input name="published">
+                <a>ISBN:</a>
+                <input name="isbn">
+                <a>Publisher:</a>
+                <input name="publisher">
+                <a>Image Link:</a>
+                <input name="image">
+                <div class="submit">
+                    <input type="submit">
+                </div>
+            </div>
+        {% if error %}
+            <div class="error">
+                <a>{{ error }}</a>
+            </div>
+        {% endif %}
+        <a name="end"></a>
+        </div>
+    </form>
+</body>
+</html>

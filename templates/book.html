@@ -1,13 +1,17 @@
 <html lang="en">
 <head>
     <title>Biblo - your home libary</title>
-    <link rel="stylesheet" type="text/css" href="static/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../static/assets/css/style.css">
 </head>
 <body>
-    <div class="title">
-        <h1>Biblo</h1>
-    </div>
+    <a href="../">
+        <div class="title">
+            <h1>Biblo</h1>
+        </div>
+    </a>
+
     <div class="container">
+
         <div class="book">
             <img class="cover" src="{{ book.cover_url }}" alt="{{ book.title }}">
             <h2>{{ book.title }}</h2>
@@ -15,9 +19,36 @@
             <p>Published: {{ book.published }}</p>
             <p>ISBN: {{ book.isbn }}</p>
             <p>Publisher: {{ book.publisher }}</p>
+            {% if book.rating %}
+                <p>Rating: {{ book.rating }}</p>
+            {% endif %}
         </div>
+    {% if book.reviews %}
+        <div class="reviews">
+            <h3>Reviews</h3>
+            {% for review in reviews %}
+                <div class="review">
+                    <p>{{ review.text }}</p>
+                    <p>Rating: {{ review.rating }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div class="add">
         <a href="/book/{{ book.isbn }}/rate">+ Rate this book</a>
+    </div>
+
+    {% if reviews %}
+        {% for review in reviews %}
+            <div class="review">
+                <p>{{ review.text }}</p>
+                <p>Rating: {{ review.rating }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="delete">
+        <a href="/book/{{ book.isbn }}/delete">- Delete this book</a>
     </div>
     </div>
 </body>
