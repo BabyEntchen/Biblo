@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from utils.books import Book, get_books
 from markupsafe import escape
 
@@ -55,11 +55,18 @@ def add_custom_form():
     return render_index()
 
 
-@app.route('/book/<isbn>')
+@app.route('/book/<isbn>', strict_slashes=False)
 def book(isbn):
     book = Book.get_book(escape(isbn))
     reviews = book.get_reviews()
     return render_template('book.html', book=book, reviews=reviews)
+
+
+@app.route('/book/<isbn>/delete')
+def delete(isbn):
+    book = Book.get_book(escape(isbn))
+    book.delete()
+    return redirect('/')
 
 
 def render_index(search):

@@ -55,7 +55,6 @@ class Book:
     def get_book(cls, isbn):
         db = Database("books.db")
         book = db.fetchone("SELECT * FROM books WHERE isbn = ?", (int(isbn),))
-        print(book)
         return cls(*book)
 
     def save(self):
@@ -109,6 +108,9 @@ class Book:
 
     def get_reviews(self):
         return self.db.fetchall("SELECT * FROM reviews WHERE isbn = ?", (int(self.isbn),))
+
+    def delete(self):
+        self.db.execute("DELETE FROM books WHERE isbn = ?", (int(self.isbn),))
 
     @property
     def rating(self):
