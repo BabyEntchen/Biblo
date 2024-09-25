@@ -38,17 +38,27 @@
             <div class="review">
                 <a>Review</a>
                 <label>
-                    <textarea id="text" name="review_field" cols="35" rows="4"></textarea>
+                    <textarea id="text" name="review" cols="35" rows="4"></textarea>
                 </label>
             </div>
             <div class="rating">
                 <a>Rating</a>
                 <label>
-                    <input type="range" id="points" name="points" min="0" max="10">
+                    <input type="range" id="points" name="points" min="0" max="10" oninput="updateValue(this.value)">
+                    <span id="rangeValue">5</span> <!-- Dies zeigt den aktuellen Wert -->
                 </label>
             </div>
             <input type="submit">
         </form>
+        <script>
+        function updateValue(val) {
+            document.getElementById('rangeValue').innerText = val;
+        }
+
+        // Initialwert setzen
+        document.getElementById('points').value = 5;
+        updateValue(5);
+        </script>
         <div class="error">
             <a>{{ error }}</a>
         </div>
@@ -59,5 +69,4 @@
             <a href="/add/custom">+ Add a custom book</a>
         </div>
     </div>
-
 </body>

@@ -1,6 +1,9 @@
+import string
+from utils.database import Database
 from flask import Flask, render_template, request, redirect
 from utils.books import Book, get_books
 from markupsafe import escape
+from string_py import Str
 
 app = Flask(__name__)
 
@@ -20,6 +23,8 @@ def add():
 def add_form():
     isbn = request.form['isbn']
     points = request.form.get('points', None)
+    review = request.form.get('review', None)
+    code = int(Str("1234567890").generate(length=9))
     if isbn:
         book = Book.isbn_get(isbn)
         try:
@@ -27,8 +32,11 @@ def add_form():
         except Exception as e:
             return render_template('add.html', error="Something went wrong. Error: " + str(e))
         if points:
-            book.add_rating(points)
-        return render_index()
+            book.add_rating(code, points)
+        if review:
+            book.add_review(code, review)
+
+        return redirect('/')
     elif search := request.form['search']:
         books = Book.search(search)
         return render_template('add.html', search_results=books)
@@ -69,7 +77,26 @@ def delete(isbn):
     return redirect('/')
 
 
-def render_index(search):
+@app.route('/book/<isbn>/rate/')
+def review(isbn):
+    book = Book.get_book(escape(isbn))
+    return render_template('rate.html', book=book)
+
+
+@app.route('/book/<isbn>/rate/', methods=['POST'])
+def review_form(isbn):
+    points = request.form.get('points', None)
+    review = request.form.get('review', None)
+    code = int(Str("1234567890").generate(length=9))
+    book = Book.get_book(escape(isbn))
+    if points:
+        book.add_rating(code, points)
+    if review:
+        book.add_review(code, review)
+    return redirect('/book/' + isbn)
+
+
+def render_index(search=None):
     books = get_books(search)
     return render_template('index.html', book_list=[book for book in books])
 

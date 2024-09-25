@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+    <title>Biblo - your home libary</title>
+    <link rel="stylesheet" type="text/css" href="/static/assets/css/style.css">
+    <meta charset="UTF-8">
+</head>
+<body>
+    <a href="../">
+        <div class="title">
+            <h1>Biblo</h1>
+        </div>
+    </a>
+
+    <div class="container">
+
+        <div class="book">
+            <img class="cover" src="{{ book.cover_url }}" alt="{{ book.title }}">
+            <h2>{{ book.title }}</h2>
+            <p>Author: {{ book.author }}</p>
+            <p>Published: {{ book.published }}</p>
+            <p>ISBN: {{ book.isbn }}</p>
+            <p>Publisher: {{ book.publisher }}</p>
+            {% if book.rating %}
+                <p>Rating: {{ book.rating }}</p>
+            {% endif %}
+        </div>
+    <div class="menu">
+    <form method="POST">
+            <div class="review">
+                <a>Review</a>
+                <label>
+                    <textarea id="text" name="review" cols="35" rows="4"></textarea>
+                </label>
+            </div>
+            <div class="rating">
+                <a>Rating</a>
+                <label>
+                    <input type="range" id="points" name="points" min="0" max="10" oninput="updateValue(this.value)">
+                    <span id="rangeValue">5</span> <!-- Dies zeigt den aktuellen Wert -->
+                </label>
+            </div>
+            <input type="submit">
+        </form>
+        <script>
+        function updateValue(val) {
+            document.getElementById('rangeValue').innerText = val;
+        }
+
+        // Initialwert setzen
+        document.getElementById('points').value = 5;
+        updateValue(5);
+        </script>
+        <div class="error">
+            <a>{{ error }}</a>
+        </div>
+    <div class="add">
+        <a href="/book/{{ book.isbn }}/rate">+ Rate this book</a>
+    </div>
+
+
+
+    <div class="delete">
+        <a href="/book/{{ book.isbn }}/delete">- Delete this book</a>
+    </div>
+    </div>
+    </div>
+</body>
+</html>

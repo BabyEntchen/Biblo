@@ -8,9 +8,9 @@ class Database:
     def create_database(self):
         conn = sqlite3.connect(self.db_name)
         c = conn.cursor()
-        c.execute("CREATE TABLE IF NOT EXISTS books (isbn INTEGER PRIMARY KEY, title TEXT, thumbnail_url TEXT, author TEXT, price TEXT, publisher TEXT, published TEXT)")
-        c.execute("CREATE TABLE IF NOT EXISTS reviews (isbn INTEGER PRIMARY KEY, review TEXT)")
-        c.execute("CREATE TABLE IF NOT EXISTS ratings (isbn INTEGER PRIMARY KEY, category TEXT, rating INTEGER)")
+        c.execute("CREATE TABLE IF NOT EXISTS reviews (review_id INTEGER PRIMARY KEY, isbn INTEGER, review TEXT)")
+        c.execute("CREATE TABLE IF NOT EXISTS ratings (review_id INTEGER PRIMARY KEY, isbn INTEGER, category TEXT, rating INTEGER)")
+        # c.execute("CREATE TABLE IF NOT EXISTS books (isbn INTEGER PRIMARY KEY, title TEXT, thumbnail_url TEXT, author TEXT, price TEXT, publisher TEXT, published TEXT)")
         conn.commit()
         conn.close()
         return self

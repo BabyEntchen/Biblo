@@ -1,5 +1,6 @@
 import requests
 from utils.database import Database
+from .reviews import Review
 
 
 class Book:
@@ -93,8 +94,8 @@ class Book:
         else:
             raise Exception("Search failed.")
 
-    def add_rating(self, points):
-        self.db.execute("INSERT INTO ratings VALUES (?, ?, ?)", (int(self.isbn), "points", points))
+    def add_rating(self, id_, points):
+        self.db.execute("INSERT INTO ratings VALUES (?, ?, ?, ?)", (id_, int(self.isbn), "points", points))
 
     def get_rating(self):
         ratings = self.db.fetchall("SELECT * FROM ratings WHERE isbn = ?", (int(self.isbn),))
@@ -102,12 +103,25 @@ class Book:
             return None
         avrg = 0
         for rating in ratings:
-            avrg += rating[2]
+            avrg += rating[3]
         avrg /= len(ratings)
         return avrg
 
-    def get_reviews(self):
+    def add_review(self, id_, review):
+        self.db.execute("INSERT INTO reviews VALUES (?, ?, ?)", (id_, int(self.isbn), review))
+
+    def get_review(self, review):
+        return self.db.fetchone("SELECT * FROM reviews WHERE isbn = ? AND review = ?", (int(self.isbn), review))
+
+    def delete_review(self, review):
+        self.db.execute("DELETE FROM reviews WHERE isbn = ? AND review = ?", (int(self.isbn), review))
+
+    def get_raw_reviews(self):
         return self.db.fetchall("SELECT * FROM reviews WHERE isbn = ?", (int(self.isbn),))
+
+    def get_reviews(self):
+        print(self.get_raw_reviews())
+        return [Review(*review) for review in self.get_raw_reviews()]
 
     def delete(self):
         self.db.execute("DELETE FROM books WHERE isbn = ?", (int(self.isbn),))

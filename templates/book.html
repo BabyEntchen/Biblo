@@ -24,29 +24,23 @@
                 <p>Rating: {{ book.rating }}</p>
             {% endif %}
         </div>
-    {% if book.reviews %}
-        <div class="reviews">
-            <h3>Reviews</h3>
-            {% for review in reviews %}
-                <div class="review">
-                    <p>{{ review.text }}</p>
-                    <p>Rating: {{ review.rating }}</p>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-    <div class="add">
-        <a href="/book/{{ book.isbn }}/rate">+ Rate this book</a>
-    </div>
-
     {% if reviews %}
+        <div class="title">
+            <h3>Reviews</h3>
+        </div>
         {% for review in reviews %}
-            <div class="review">
+            <div class="review_">
+                <h3>Review: {{ review.review_id }}</h3>
                 <p>{{ review.text }}</p>
                 <p>Rating: {{ review.rating }}</p>
             </div>
         {% endfor %}
     {% endif %}
+    <div class="add">
+        <a href="/book/{{ book.isbn }}/rate">+ Rate this book</a>
+    </div>
+
+
     
     <div class="delete">
         <a href="/book/{{ book.isbn }}/delete">- Delete this book</a>
