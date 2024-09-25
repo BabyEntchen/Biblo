@@ -97,6 +97,7 @@ def review_form(isbn):
 
 
 def render_index(search=None):
+    Database("books.db").create_database()
     books = get_books(search)
     return render_template('index.html', book_list=[book for book in books])
 
