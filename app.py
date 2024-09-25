@@ -60,7 +60,7 @@ def add_custom_form():
         book.save()
     except Exception as e:
         return render_template('custom.html', error="Something went wrong. Error: " + str(e))
-    return render_index()
+    return redirect('/')
 
 
 @app.route('/book/<isbn>', strict_slashes=False)
