@@ -1,4 +1,4 @@
-# My Book Library Web App
+# A Book Library Web App
 
 This is a fun project where I'm building a web library to help digitize and rate my own collection of books.
 
