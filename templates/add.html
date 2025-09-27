@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-    <title>Biblo - your home libary</title>
+    <title>Biblo - your home library</title>
     <link rel="stylesheet" type="text/css" href="static/assets/css/style.css">
     <meta charset="UTF-8">
 </head>
@@ -45,7 +45,13 @@
                 <a>Rating</a>
                 <label>
                     <input type="range" id="points" name="points" min="0" max="10" oninput="updateValue(this.value)">
-                    <span id="rangeValue">5</span> <!-- Dies zeigt den aktuellen Wert -->
+                    <span id="rangeValue">0</span> <!-- Dies zeigt den aktuellen Wert -->
+                </label>
+            </div>
+            <div class="pages">
+                <a>Pages</a>
+                <label>
+                    <input name="pages" type="number" min="1">
                 </label>
             </div>
             <input type="submit">
@@ -56,8 +62,8 @@
         }
 
         // Initialwert setzen
-        document.getElementById('points').value = 5;
-        updateValue(5);
+        document.getElementById('points').value = 0;
+        updateValue(0);
         </script>
         <div class="error">
             <a>{{ error }}</a>

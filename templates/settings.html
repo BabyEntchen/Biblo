@@ -1,0 +1,50 @@
+<html lang="en">
+<head>
+    <title>Biblo - your home library</title>
+    <link rel="stylesheet" type="text/css" href="/static/assets/css/style.css">
+    <meta charset="UTF-8">
+</head>
+<body>
+    <a href="../">
+        <div class="title">
+            <h1>Biblo</h1>
+        </div>
+    </a>
+
+    <div class="container">
+        <div class="setting">
+            <h3>Reading goal</h3>
+            <form method="POST">
+                <a>Set reading goal (this year):</a>
+                <label>
+                    <input type="number" name="goal" value="{{ goal }}" min="1" max="100">
+                </label>
+                <div class="submit">
+                    <input type="submit">
+                </div>
+            </form>
+            <form method="POST">
+                <a>Set read books (this year):</a>
+                <label>
+                    <input type="number" name="finished" value="{{ finished }}" min="1" max="100">
+                </label>
+                <div class="submit">
+                    <input type="submit">
+                </div>
+            </form>
+        </div>
+        <div class="setting">
+            <h3>Reading strike</h3>
+            <form method="POST">
+                <a>Active reading streak:</a>
+                <label>
+                    <input type="number" name="streak" value="{{ streak }}" min="1">
+                </label>
+                <div class="submit">
+                    <input type="submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

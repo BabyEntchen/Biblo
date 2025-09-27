@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-    <title>Biblo - your home libary</title>
+    <title>Biblo - your home library</title>
     <link rel="stylesheet" type="text/css" href="../static/assets/css/style.css">
     <meta charset="UTF-8">
 </head>
@@ -24,6 +24,26 @@
                 <p>Rating: {{ book.rating }}</p>
             {% endif %}
         </div>
+
+    <div class="title">
+        <h3>Progress:</h3>
+        <div class="progress">
+            <form method="POST">
+                <div class="progress-row">
+                    <p>Page</p>
+                    <label>
+                        <input type="number" name="progress" value="{{ progress.progress }}" min="0" max="{{ progress.pages }}">
+                    </label>
+                    <p>/{{ progress.pages }} ({{ percent }}%)</p>
+                </div>
+                <div class="submit">
+                    <input type="submit" value="Update">
+                </div>
+            </form>
+        </div>
+    </div>
+
+
     {% if reviews %}
         <div class="title">
             <h3>Reviews</h3>
@@ -36,6 +56,7 @@
             </div>
         {% endfor %}
     {% endif %}
+
     <div class="add">
         <a href="/book/{{ book.isbn }}/rate">+ Rate this book</a>
     </div>

@@ -11,6 +11,10 @@ class Database:
         c.execute("CREATE TABLE IF NOT EXISTS books (isbn INTEGER PRIMARY KEY, title TEXT, thumbnail_url TEXT, author TEXT, price TEXT, publisher TEXT, published TEXT)")
         c.execute("CREATE TABLE IF NOT EXISTS reviews (review_id INTEGER PRIMARY KEY, isbn INTEGER, review TEXT)")
         c.execute("CREATE TABLE IF NOT EXISTS ratings (review_id INTEGER PRIMARY KEY, isbn INTEGER, category TEXT, rating INTEGER)")
+        c.execute("CREATE TABLE IF NOT EXISTS progress (isbn INTEGER PRIMARY KEY, progress INTEGER, pages TEXT, date TEXT)")
+        c.execute("CREATE TABLE IF NOT EXISTS finished (year, current INTEGER)")
+        c.execute("CREATE TABLE IF NOT EXISTS goal (year INTEGER PRIMARY KEY, number INTEGER)")
+        c.execute("CREATE TABLE IF NOT EXISTS streak (date TEXT PRIMARY KEY, current INTEGER)")
         conn.commit()
         conn.close()
         return self

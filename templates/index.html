@@ -1,12 +1,29 @@
 <html lang="en">
 <head>
-    <title>Biblo - your home libary</title>
+    <title>Biblo - your home library</title>
     <link rel="stylesheet" type="text/css" href="static/assets/css/style.css">
     <meta charset="UTF-8">
 </head>
 <body>
-    <div class="title">
-        <h1>Biblo</h1>
+    <a href="./">
+        <div class="title">
+            <h1>Biblo</h1>
+        </div>
+    </a>
+    <a href="./settings">
+        <div class="gear">
+            ⚙️
+        </div>
+    </a>
+    <div class="streak">
+        <a>🔥 Active reading streak: {{ streak }}</a>
+        <button onclick="window.location.href='/read_today'">
+            <a>Read today</a>
+        </button>
+        <a>| Finished books: {{ finished }}/{{ goal }}</a>
+        <button onclick="window.location.href='/settings'">
+            <a>Change goal</a>
+        </button>
     </div>
         <div class="search">
             <a>Search</a>
