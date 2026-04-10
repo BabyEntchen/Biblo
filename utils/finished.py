@@ -7,8 +7,7 @@ def add_read_book():
     year = datetime.date.today().year
     existing = db.fetchone("SELECT * FROM finished WHERE year = ?", (year,))
     if existing:
-        yesterday = datetime.date.today() - datetime.timedelta(days=1)
-        current = get_read(yesterday.isoformat())
+        current = get_read()
         db.execute("UPDATE finished SET current = ? WHERE year = ?", (current + 1, year))
     else:
         db.execute("INSERT INTO finished (year, current) VALUES (?, ?)", (year, 1))

@@ -186,7 +186,6 @@ class Book:
         return self.db.fetchall("SELECT * FROM reviews WHERE isbn = ?", (int(self.isbn),))
 
     def get_reviews(self):
-        print(self.get_raw_reviews())
         return [Review(*review) for review in self.get_raw_reviews()]
 
     def delete(self):

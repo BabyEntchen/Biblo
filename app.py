@@ -75,18 +75,18 @@ def add_custom_form():
 # In app.py
 @app.route('/book/<isbn>', strict_slashes=False, methods=['GET', 'POST'])
 def book(isbn):
-    book = Book.get_book(escape(isbn))
-    progress = book.progress()
-    if request.method == 'POST':
-        new_progress = request.form.get('progress')
-        if new_progress is not None:
-            try:
-                progress.update_progress(int(new_progress))
-            except Exception as e:
-                pass
-                # flash(f"Fehler beim Aktualisieren des Fortschritts: {e}")
-    reviews = book.get_reviews()
-    return render_template('book.html', book=book, reviews=reviews, progress=progress, percent=progress.progress_percentage())
+    if isbn:
+        book = Book.get_book(escape(isbn))
+        progress = book.progress()
+        if request.method == 'POST':
+            new_progress = request.form.get('progress')
+            if new_progress is not None:
+                try:
+                    progress.update_progress(int(new_progress))
+                except Exception as e:
+                    flash(f"Fehler beim Aktualisieren des Fortschritts: {e}")
+        reviews = book.get_reviews()
+        return render_template('book.html', book=book, reviews=reviews, progress=progress, percent=progress.progress_percentage())
 
 
 @app.route('/book/<isbn>/delete')
@@ -120,7 +120,11 @@ def settings():
                 db.execute("INSERT INTO goal (year, number) VALUES (?, ?)", (year, goal))
 
         if finished:
-            db.execute("UPDATE finished SET current = ? WHERE year = ?", (finished, year))
+            existing = db.fetchone("SELECT current FROM finished WHERE year = ?", (year,))
+            if existing:
+                db.execute("UPDATE finished SET current = ? WHERE year = ?", (finished, year))
+            else:
+                db.execute("INSERT INTO finished (current, year) VALUES (?, ?)", (finished, year))
 
         if streak:
             set_streak(int(streak))

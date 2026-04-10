@@ -1,4 +1,6 @@
 from utils.database import Database
+from utils.finished import add_read_book
+from utils.streak import add_read_day
 
 
 class ReadingProgress:
@@ -25,10 +27,14 @@ class ReadingProgress:
         return instance
 
     def update_progress(self, new_progress):
-        if 0 <= new_progress <= self.pages:
-            self.progress = new_progress
-            self.db.execute(
-                "UPDATE progress SET progress = ? WHERE isbn = ?", new_progress, self.book.isbn)
+        if 0 <= new_progress:
+            if new_progress <= self.pages:
+                self.progress = new_progress
+                self.db.execute(
+                    "UPDATE progress SET progress = ? WHERE isbn = ?", (new_progress, self.book.isbn,))
+            if new_progress == self.pages:
+                add_read_book()
+            add_read_day()
         else:
             raise ValueError("Progress must be between 0 and the total number of pages.")
 
